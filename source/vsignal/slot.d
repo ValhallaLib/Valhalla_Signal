@@ -40,6 +40,26 @@ package void connect(alias pred, F)(auto ref Slot!F slot)
 	slot.connect!(C.fooC);
 }
 
+package void connect(alias pred, T, F)(auto ref Slot!F slot, ref T instance)
+{
+	with(slot)
+	{
+		payload = () @trusted { return cast(from!"std.traits".Unqual!T*) &instance; } ();
+		fn = (const scope void* payload, Parameters args)
+		{
+			import core.lifetime : forward;
+			import vsignal.utils : invoke;
+
+			T* type = () @trusted { return cast(T*) payload; } ();
+
+			static if (is(ReturnType == void))
+				invoke!pred(*type, forward!args);
+			else
+				return ReturnType(invoke!pred(*type, forward!args));
+		};
+	}
+}
+
 package struct Slot(F)
 {
 	import vsignal.utils : from;
