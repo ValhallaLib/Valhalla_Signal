@@ -16,3 +16,30 @@ struct Signal(F)
 package:
 	Slot!F[] calls;
 }
+
+unittest
+{
+	Signal!(void delegate(int)) sig;
+
+	struct Listener
+	{
+		int i;
+		void opCall(int var) { i = var; }
+	}
+
+	Listener listener;
+
+	Slot!(void delegate(int)) slotA;
+	Slot!(void delegate(int)) slotB;
+
+	slotA.connect!(Listener.opCall)(listener);
+	slotB.connect!((ref i) => listener.i++ );
+
+	sig.calls = [
+		slotA,
+		slotB
+	];
+
+	sig.emit(5);
+	assert(listener.i == 6);
+}
