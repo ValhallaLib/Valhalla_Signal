@@ -1,0 +1,15 @@
+{
+	"authors": [
+		"João Lourenço"
+	],
+	"copyright": "Copyright © 2021, João Lourenço",
+	"description": "A multipurpose Signal library",
+	"license": "MIT",
+	"name": "vsignal",
+	"targetType": "library",
+	"targetPath": "bin",
+	"sourcePaths": ["source"],
+	"importPaths": [
+		"source"
+	]
+}
