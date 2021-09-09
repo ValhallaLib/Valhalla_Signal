@@ -33,3 +33,35 @@ package template tryForward(alias F, args...)
 
 	alias tryForward = tryForwardImpl!(0, args.length);
 }
+
+@safe pure nothrow @nogc unittest
+{
+	class C
+	{
+		static int foo(int) { return 1; }
+		static int foo(ref int) { return 2; }
+
+		static int foo(int, ref int) { return 1; }
+		static int foo(ref int, int) { return 2; }
+
+		static int foo(ref int, int, const int, const ref int) { return 2; }
+	}
+
+	int foo(Args...)(auto ref Args args)
+	{
+		return C.foo(tryForward!(C.foo, args));
+	}
+
+	int i;
+
+	assert(foo(4) == 1);
+	assert(foo(i) == 2);
+
+	assert(foo(4, i) == 1);
+	assert(foo(i, 4) == 2);
+
+	assert(foo(i, 4, i, 4) == 2);
+
+	static assert(!__traits(compiles, foo(i, i)));
+	static assert(!__traits(compiles, foo(4, 4)));
+}
