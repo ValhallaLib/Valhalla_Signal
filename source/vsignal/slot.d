@@ -60,6 +60,26 @@ package void connect(alias pred, T, F)(auto ref Slot!F slot, ref T instance)
 	}
 }
 
+@safe pure nothrow @nogc unittest
+{
+	Slot!(void delegate(int)) slot;
+
+	struct Listener
+	{
+		void opCall(int) {}
+		void fooA(const int) {}
+		void fooB(ref int) {}
+		void fooC(const ref int) {}
+	}
+
+	Listener listener;
+
+	slot.connect!(Listener.opCall)(listener);
+	slot.connect!(Listener.fooA)(listener);
+	slot.connect!(Listener.fooB)(listener);
+	slot.connect!(Listener.fooC)(listener);
+}
+
 package struct Slot(F)
 {
 	import vsignal.utils : from;
