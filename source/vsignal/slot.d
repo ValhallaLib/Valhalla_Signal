@@ -102,3 +102,28 @@ package:
 	Function fn;
 	void* payload;
 }
+
+///
+unittest
+{
+	@safe struct Listener
+	{
+		int i;
+
+		auto foo(int var) return
+		{
+			i = var;
+			return &this;
+		}
+	}
+
+	Listener listener;
+	alias myfoo = Listener.foo;
+
+	Slot!(Listener* delegate(int) @safe) slot;
+
+	slot.connect!(myfoo)(listener);
+
+	assert(slot(4) is &listener);
+	assert(listener.i == 4);
+}
