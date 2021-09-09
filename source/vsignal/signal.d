@@ -6,4 +6,6 @@ struct Signal(F)
 	if (is(F : RT delegate(Args), RT, Args...))
 {
 
+package:
+	Slot!F[] calls;
 }
