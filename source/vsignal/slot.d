@@ -16,6 +16,30 @@ package void connect(alias pred, F)(auto ref Slot!F slot)
 	}
 }
 
+@safe pure nothrow @nogc unittest
+{
+	Slot!(void delegate(int)) slot;
+
+	class C
+	{
+		static void opCall(int) {}
+		static void fooA(const int) {}
+		static void fooB(ref int) {}
+		static void fooC(const ref int) {}
+	}
+
+	// all lambda listeners can omit the type
+	slot.connect!((ref _)       {});
+	slot.connect!((const ref _) {});
+	slot.connect!((_)           {});
+	slot.connect!((const _)     {});
+
+	slot.connect!(C.opCall);
+	slot.connect!(C.fooA);
+	slot.connect!(C.fooB);
+	slot.connect!(C.fooC);
+}
+
 package struct Slot(F)
 {
 	import vsignal.utils : from;
