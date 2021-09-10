@@ -85,6 +85,11 @@ void disconnect(T, F)(auto ref Sink!F sink, ref T instance)
 	}
 }
 
+void disconnect(F)(auto ref Sink!F sink)
+{
+	sinksignal.calls = [];
+}
+
 private void release(alias pred, F)(void* signal)
 {
 	Sink!F(() @trusted { return cast(Signal!F*) signal; } ()).disconnect!pred();
