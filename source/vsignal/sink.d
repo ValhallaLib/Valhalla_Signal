@@ -20,6 +20,23 @@ void disconnect(alias pred, F)(auto ref Sink!F sink)
 	}
 }
 
+void disconnect(alias pred, T, F)(auto ref Sink!F sink, ref T instance)
+{
+	import std.algorithm.mutation : remove, SwapStrategy;
+	import std.algorithm.searching : countUntil;
+
+	Slot!F call;
+	call.slot_connect!pred(instance);
+
+	with (sink)
+	{
+		const index = signal.calls.countUntil(call);
+
+		if (index > -1)
+			signal.calls = signal.calls.remove!(SwapStrategy.unstable)(index);
+	}
+}
+
 struct Sink(F)
 {
 private:
