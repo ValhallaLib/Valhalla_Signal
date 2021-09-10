@@ -14,6 +14,14 @@ struct Signal(F)
 			cast(void) call(forward!args);
 	}
 
+	Sink!F sink(this This)()
+	{
+		// https://issues.dlang.org/show_bug.cgi?id=22309
+		auto sinkImpl = (ref return This signal) => Sink!F(&signal);
+
+		return sinkImpl(this);
+	}
+
 package:
 	Slot!F[] calls;
 }
