@@ -1,5 +1,6 @@
 module vsignal.signal;
 
+import vsignal.sink;
 import vsignal.slot;
 
 struct Signal(F)
