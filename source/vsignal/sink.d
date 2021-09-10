@@ -22,6 +22,25 @@ Connection connect(alias pred, F)(auto ref Sink!F sink)
 	}
 }
 
+Connection connect(alias pred, T, F)(auto ref Sink!F sink, ref T instance)
+{
+	sink.disconnect!pred(instance);
+
+	import core.lifetime : move;
+
+	with (sink)
+	{
+		Slot!F call;
+		call.slot_connect!pred(instance);
+		signal.calls ~= call.move();
+
+		Slot!(void delegate(void* signal) @safe pure nothrow) conn;
+		conn.slot_connect!(release!(pred, T, F))(instance);
+
+		return Connection(conn.move(), signal);
+	}
+}
+
 void disconnect(alias pred, F)(auto ref Sink!F sink)
 {
 	import std.algorithm.mutation : remove, SwapStrategy;
