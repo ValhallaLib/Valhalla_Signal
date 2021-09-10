@@ -22,6 +22,11 @@ struct Signal(F)
 		return sinkImpl(this);
 	}
 
+	bool empty() const @property
+	{
+		return !calls.length;
+	}
+
 package:
 	Slot!F[] calls;
 }
