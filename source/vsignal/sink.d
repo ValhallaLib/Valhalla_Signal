@@ -37,6 +37,11 @@ void disconnect(alias pred, T, F)(auto ref Sink!F sink, ref T instance)
 	}
 }
 
+private void release(alias pred, F)(void* signal)
+{
+	Sink!F(() @trusted { return cast(Signal!F*) signal; } ()).disconnect!pred();
+}
+
 struct Sink(F)
 {
 private:
