@@ -27,6 +27,11 @@ struct Signal(F)
 		return !calls.length;
 	}
 
+	size_t length() const @property
+	{
+		return calls.length;
+	}
+
 package:
 	Slot!F[] calls;
 }
