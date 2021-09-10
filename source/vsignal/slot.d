@@ -103,6 +103,12 @@ package struct Slot(F)
 		return fn.funcptr is other.fn.funcptr && payload is other.payload;
 	}
 
+	void reset()
+	{
+		fn = null;
+		payload = null;
+	}
+
 package:
 	Function fn;
 	void* payload;
