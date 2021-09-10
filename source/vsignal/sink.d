@@ -1,6 +1,7 @@
 module vsignal.sink;
 
 import vsignal.signal;
+import vsignal.slot : Slot, slot_connect = connect;
 
 struct Sink(F)
 {
