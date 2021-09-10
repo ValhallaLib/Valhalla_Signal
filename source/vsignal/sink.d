@@ -42,6 +42,11 @@ private void release(alias pred, F)(void* signal)
 	Sink!F(() @trusted { return cast(Signal!F*) signal; } ()).disconnect!pred();
 }
 
+private void release(alias pred, T, F)(ref T instance, void* signal)
+{
+	Sink!F(() @trusted { return cast(Signal!F*) signal; } ()).disconnect!pred(instance);
+}
+
 struct Sink(F)
 {
 private:
