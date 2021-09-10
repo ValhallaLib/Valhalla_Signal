@@ -109,6 +109,11 @@ package struct Slot(F)
 		payload = null;
 	}
 
+	bool opCast(T : bool)() const
+	{
+		return fn.funcptr !is null;
+	}
+
 package:
 	Function fn;
 	void* payload;
