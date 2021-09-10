@@ -98,6 +98,11 @@ package struct Slot(F)
 		return fn(payload, from!"core.lifetime".forward!args);
 	}
 
+	bool opEquals(F)(const Slot!F other) const
+	{
+		return fn.funcptr is other.fn.funcptr && payload is other.payload;
+	}
+
 package:
 	Function fn;
 	void* payload;
