@@ -26,6 +26,50 @@ package:
 	Slot!F[] calls;
 }
 
+///
+unittest
+{
+	Signal!(void delegate(int) @safe pure nothrow) signal;
+	Signal!(void delegate(ref int) @safe pure nothrow) signalRef;
+
+	static struct Listener
+	{
+		int i;
+		void opCall()(const ref int)
+		{
+			i++;
+		}
+	}
+
+	Listener listener;
+
+	signal.sink.connect!(Listener.opCall)(listener);
+	signalRef.sink.connect!(Listener.opCall)(listener);
+
+	int var;
+
+	signal.emit(var);
+	signalRef.emit(var);
+
+	assert(listener.i == 2);
+}
+
+///
+unittest
+{
+	Signal!(void delegate(int)) signal;
+	int var = 35;
+
+	signal.sink.connect!((ref i, const int x) {
+		assert(&i is &var);
+		i += x;
+	})(var);
+
+	signal.emit(3);
+
+	assert(var == 38);
+}
+
 unittest
 {
 	Signal!(void delegate(int)) sig;
