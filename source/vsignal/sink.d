@@ -10,6 +10,15 @@ private:
 
 struct Connection
 {
+	void release()()
+	{
+		if (disconnect)
+		{
+			disconnect(signal);
+			disconnect.reset();
+		}
+	}
+
 private:
 	Slot!(void delegate(void*) @safe pure nothrow) disconnect;
 	void* signal;
