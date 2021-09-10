@@ -75,6 +75,16 @@ void disconnect(alias pred, T, F)(auto ref Sink!F sink, ref T instance)
 	}
 }
 
+void disconnect(T, F)(auto ref Sink!F sink, ref T instance)
+{
+	import std.algorithm.mutation : remove, SwapStrategy;
+
+	with (sink)
+	{
+		signal.calls = signal.calls.remove!(call => call.payload is &instance , SwapStrategy.unstable);
+	}
+}
+
 private void release(alias pred, F)(void* signal)
 {
 	Sink!F(() @trusted { return cast(Signal!F*) signal; } ()).disconnect!pred();
