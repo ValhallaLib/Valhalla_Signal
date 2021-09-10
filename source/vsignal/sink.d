@@ -3,6 +3,25 @@ module vsignal.sink;
 import vsignal.signal;
 import vsignal.slot : Slot, slot_connect = connect;
 
+Connection connect(alias pred, F)(auto ref Sink!F sink)
+{
+	sink.disconnect!pred;
+
+	import core.lifetime : move;
+
+	with (sink)
+	{
+		Slot!F call;
+		call.slot_connect!pred;
+		signal.calls ~= call.move();
+
+		Slot!(void delegate(void* signal) @safe pure nothrow) conn;
+		conn.slot_connect!(release!(pred, F))();
+
+		return Connection(conn.move(), signal);
+	}
+}
+
 void disconnect(alias pred, F)(auto ref Sink!F sink)
 {
 	import std.algorithm.mutation : remove, SwapStrategy;
