@@ -70,3 +70,35 @@ package template from(string mod)
 {
 	mixin("import from = ", mod, ";");
 }
+
+package auto ref invoke(alias F, Args...)(auto ref Args args)
+	if (!from!"std.traits".isCallable!F)
+{
+	// we enter here because F might be a lambda
+	// if F is a lambda we know it is not a data member
+	return F(tryForward!(F, args));
+}
+
+package auto ref invoke(alias F, Args...)(auto ref Args args)
+	if (from!"std.traits".isCallable!F)
+{
+	static if (!Args.length)
+		return F();
+
+	else
+	{
+		alias front = args[0];
+		alias FrontType = Args[0];
+		alias params = args[1..$];
+
+		static if (is(__traits(parent, F) == FrontType))
+		{
+			return __traits(child, front, F)(tryForward!(F, params));
+		}
+		else
+		{
+			static immutable Tinit = FrontType.init;
+			return F(front, tryForward!(F, Tinit, params)[1..$]);
+		}
+	}
+}
