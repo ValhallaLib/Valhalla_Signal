@@ -65,3 +65,8 @@ package template tryForward(alias F, args...)
 	static assert(!__traits(compiles, foo(i, i)));
 	static assert(!__traits(compiles, foo(4, 4)));
 }
+
+package template from(string mod)
+{
+	mixin("import from = ", mod, ";");
+}
