@@ -102,6 +102,11 @@ private void release(alias pred, T, F)(ref T instance, void* signal)
 
 struct Sink(F)
 {
+	this(scope Signal!F* sig)
+	{
+		signal = sig;
+	}
+
 private:
 	Signal!F* signal;
 }
