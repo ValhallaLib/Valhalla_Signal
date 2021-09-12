@@ -112,6 +112,11 @@ struct Sink(F)
 		return signal.length;
 	}
 
+	bool empty() const @property
+	{
+		return signal.empty;
+	}
+
 private:
 	Signal!F* signal;
 }
