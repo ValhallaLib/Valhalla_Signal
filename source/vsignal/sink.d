@@ -107,6 +107,11 @@ struct Sink(F)
 		signal = sig;
 	}
 
+	size_t length() const @property
+	{
+		return signal.length;
+	}
+
 private:
 	Signal!F* signal;
 }
