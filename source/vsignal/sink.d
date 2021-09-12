@@ -123,6 +123,11 @@ private:
 
 struct Connection
 {
+	bool opCast(T : bool)() const
+	{
+		return disconnect;
+	}
+
 	void release()()
 	{
 		if (disconnect)
