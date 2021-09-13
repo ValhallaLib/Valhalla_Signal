@@ -6,6 +6,12 @@ import vsignal.slot;
 struct Signal(F)
 	if (is(F : RT delegate(Args), RT, Args...))
 {
+	/**
+	Publish a signal.
+
+	Params:
+		args = the Signal's function parameters to call each listener with.
+	*/
 	void emit(Slot!F.Parameters args)
 	{
 		import core.lifetime : forward;
