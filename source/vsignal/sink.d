@@ -131,11 +131,21 @@ void disconnect(F)(auto ref Sink!F sink)
 	sinksignal.calls = [];
 }
 
+/**
+Used as a bridge between Sink and Connection to correctly disconnect a listener
+from a signal.
+
+Params:
+	pred = the listener to disconnect,
+	signal = the signal that contains the listener.
+	instance = the payload that is attached to the listener.
+*/
 private void release(alias pred, F)(void* signal)
 {
 	Sink!F(() @trusted { return cast(Signal!F*) signal; } ()).disconnect!pred();
 }
 
+///
 private void release(alias pred, T, F)(ref T instance, void* signal)
 {
 	Sink!F(() @trusted { return cast(Signal!F*) signal; } ()).disconnect!pred(instance);
