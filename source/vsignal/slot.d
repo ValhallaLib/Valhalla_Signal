@@ -1,5 +1,15 @@
 module vsignal.slot;
 
+/**
+Binds a function to a Slot. A payload can be passed if the function to call is
+a data member function of the same or if the function accepts as its first
+parameter a reference to its type.
+
+Params:
+	pred = the function to bind.
+	slot = the Slot that holds the function.
+	instance = the payload to keep.
+*/
 package void connect(alias pred, F)(auto ref Slot!F slot)
 {
 	import vsignal.utils : tryForward;
@@ -40,6 +50,7 @@ package void connect(alias pred, F)(auto ref Slot!F slot)
 	slot.connect!(C.fooC);
 }
 
+///
 package void connect(alias pred, T, F)(auto ref Slot!F slot, ref T instance)
 {
 	with(slot)
