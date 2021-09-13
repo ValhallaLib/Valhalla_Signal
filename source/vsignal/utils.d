@@ -1,5 +1,15 @@
 module vsignal.utils;
 
+/**
+Attempts to forward each parameter. If a parameters cannot be forwarded to F
+then the same is treated as an 'lvalue' and copied.
+
+Params:
+	F = Function to follow.
+	args = a parameter list or an std.meta.AliasSeq.
+
+Returns: An `AliasSeq` of args ready to be correctly forwarded or copied.
+*/
 package template tryForward(alias F, args...)
 {
 	import core.lifetime : forward;
