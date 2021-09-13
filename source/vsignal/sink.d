@@ -55,6 +55,30 @@ Connection connect(alias pred, T, F)(auto ref Sink!F sink, ref T instance)
 	}
 }
 
+/++
+Disconnects a listener from a Signal. The order is not preserved after the
+removal.
+
+Examples:
+---
+void method() {}
+struct Foo { void method() {} }
+Foo foo;
+
+/* ... */
+
+// lets assume a signal exists with listeners
+sink.disconnect!(Foo.method)(foo); // disconnects Foo.method with payload foo
+sink.disconnect!method;            // disconnects method
+sink.disconnect(foo);              // disconnects all listeners with payload foo
+sink.disconnect();                 // disconnects all listeners
+---
+
+Params:
+	pred = the listener to disconnect.
+	sink = the Sink that holds the signal.
+	instance = the payload that composes the listener.
++/
 void disconnect(alias pred, F)(auto ref Sink!F sink)
 {
 	import std.algorithm.mutation : remove, SwapStrategy;
@@ -72,6 +96,7 @@ void disconnect(alias pred, F)(auto ref Sink!F sink)
 	}
 }
 
+///
 void disconnect(alias pred, T, F)(auto ref Sink!F sink, ref T instance)
 {
 	import std.algorithm.mutation : remove, SwapStrategy;
@@ -89,6 +114,7 @@ void disconnect(alias pred, T, F)(auto ref Sink!F sink, ref T instance)
 	}
 }
 
+///
 void disconnect(T, F)(auto ref Sink!F sink, ref T instance)
 {
 	import std.algorithm.mutation : remove, SwapStrategy;
@@ -99,6 +125,7 @@ void disconnect(T, F)(auto ref Sink!F sink, ref T instance)
 	}
 }
 
+///
 void disconnect(F)(auto ref Sink!F sink)
 {
 	sinksignal.calls = [];
