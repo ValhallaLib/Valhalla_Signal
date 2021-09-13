@@ -87,6 +87,33 @@ package template from(string mod)
 	mixin("import from = ", mod, ";");
 }
 
+/**
+Correctly calls a function with the given arguments.
+
+If `F` is not a Callable (e.g lambda infered as void) then `F` is called with
+`args`. If `F` is Callable and is a member function of `args[0]`, then the
+function is called using `args[0]` as the instance with `args[1..$]` as the
+parameters. Otherwise, `F` is called normally. The arguments are attempted to be
+forwarded with `tryForward`.
+
+Params:
+	F = the function to invoke.
+	args = the arguments to call F with.
+
+Examples:
+---
+void method(ref Foo) {}
+
+struct Foo { void method() {} }
+Foo foo;
+
+invoke!(Foo.method)(foo); // correctly invokes method from foo
+invoke!method(foo);       // correctly invokes method
+invoke!(_ => _ + 1)(4);   // correctly invokes the lambda
+---
+
+Returns: The value returned by `F`.
+*/
 package auto ref invoke(alias F, Args...)(auto ref Args args)
 	if (!from!"std.traits".isCallable!F)
 {
@@ -95,6 +122,7 @@ package auto ref invoke(alias F, Args...)(auto ref Args args)
 	return F(tryForward!(F, args));
 }
 
+///
 package auto ref invoke(alias F, Args...)(auto ref Args args)
 	if (from!"std.traits".isCallable!F)
 {
