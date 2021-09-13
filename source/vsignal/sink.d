@@ -3,6 +3,19 @@ module vsignal.sink;
 import vsignal.signal;
 import vsignal.slot : Slot, slot_connect = connect;
 
+/**
+Connect a listener to a Signal.
+
+A payload can be passed if the function to call is a data member function of the
+same or if the function accepts as its first parameter a reference to its type.
+
+Params:
+	pred = the listener to connect.
+	sink = the Sink that holds the signal.
+	instance = the payload to store.
+
+Returns: A Connection of the listener.
+*/
 Connection connect(alias pred, F)(auto ref Sink!F sink)
 {
 	sink.disconnect!pred;
@@ -22,6 +35,7 @@ Connection connect(alias pred, F)(auto ref Sink!F sink)
 	}
 }
 
+///
 Connection connect(alias pred, T, F)(auto ref Sink!F sink, ref T instance)
 {
 	sink.disconnect!pred(instance);
