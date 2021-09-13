@@ -76,6 +76,12 @@ package template tryForward(alias F, args...)
 	static assert(!__traits(compiles, foo(4, 4)));
 }
 
+/**
+Helper for inline imports.
+
+Params:
+	mod = module to import.
+*/
 package template from(string mod)
 {
 	mixin("import from = ", mod, ";");
