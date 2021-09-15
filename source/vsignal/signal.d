@@ -20,6 +20,16 @@ struct Signal(F)
 			cast(void) call(forward!args);
 	}
 
+	/**
+	Get a Sink to connect and disconnect listeners from a Signal.
+
+	This function can be @trusted if the lifetime of the Sink does not extend the
+	lifetime of the Signal.
+
+	Note: DIP1000 can detect if a reference escapes and as such it can infer @safe.
+
+	Returns: A newly constructed Sink.
+	*/
 	Sink!F sink(this This)()
 	{
 		// https://issues.dlang.org/show_bug.cgi?id=22309
