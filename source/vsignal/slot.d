@@ -1,5 +1,6 @@
 module vsignal.slot;
 
+// https://issues.dlang.org/show_bug.cgi?id=5710
 /**
 Binds a function to a Slot. A payload can be passed if the function to call is
 a data member function of the same or if the function accepts as its first

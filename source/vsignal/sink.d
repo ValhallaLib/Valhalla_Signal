@@ -3,6 +3,7 @@ module vsignal.sink;
 import vsignal.signal;
 import vsignal.slot : Slot, slot_connect = connect;
 
+// https://issues.dlang.org/show_bug.cgi?id=5710
 /**
 Connect a listener to a Signal.
 
@@ -55,6 +56,7 @@ Connection connect(alias pred, T, F)(auto ref Sink!F sink, ref T instance)
 	}
 }
 
+// https://issues.dlang.org/show_bug.cgi?id=5710
 /++
 Disconnects a listener from a Signal. The order is not preserved after the
 removal.
@@ -131,6 +133,7 @@ void disconnect(F)(auto ref Sink!F sink)
 	sinksignal.calls = [];
 }
 
+// https://issues.dlang.org/show_bug.cgi?id=5710
 /**
 Used as a bridge between Sink and Connection to correctly disconnect a listener
 from a signal.
