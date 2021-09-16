@@ -11,5 +11,12 @@
 	"sourcePaths": ["source"],
 	"importPaths": [
 		"source"
-	]
+	],
+	"buildTypes": {
+		"unittest-dip1000": {
+			"buildOptions": ["unittests", "debugMode"],
+			"dflags": ["-preview=dip1000"],
+			"versions": ["vsignal_dip1000"]
+		}
+	}
 }
