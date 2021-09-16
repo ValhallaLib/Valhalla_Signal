@@ -100,6 +100,18 @@ unittest
 {
 	Signal!(void delegate(int)) sig;
 
+	version(vsignal_dip1000)
+		static assert( __traits(compiles, () @safe { sig.sink; } )); // calling Sink is @safe
+	else
+		static assert(!__traits(compiles, () @safe { sig.sink; } )); // calling Sink is @system
+
+	static assert(!__traits(compiles, () @safe => Signal!(void delegate(int)).sink));
+}
+
+unittest
+{
+	Signal!(void delegate(int)) sig;
+
 	struct Listener
 	{
 		int i;
